@@ -1,0 +1,13 @@
+FROM gcc:11.2.0 AS builder
+WORKDIR /usr/cypherlib
+RUN apt update && apt install build-essential -y
+ADD . /usr/cypherlib
+
+FROM builder
+WORKDIR /usr/cypherlib
+RUN make clean && make test
+
+FROM debian:bookworm-slim
+WORKDIR /root/
+COPY --from=1 /usr/cypherlib/test /root/test
+CMD ["/root/test"]  

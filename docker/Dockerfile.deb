@@ -1,0 +1,10 @@
+FROM gcc:11.2.0 AS builder
+WORKDIR /usr/cypherlib
+RUN apt update && apt install build-essential gdb valgrind -y
+ADD . /usr/cypherlib
+
+FROM builder
+WORKDIR /usr/cypherlib
+COPY ./docker/valgrind.sh /usr/cypherlib/valgrind.sh
+RUN make clean && make test
+CMD ["/usr/cypherlib/valgrind.sh"]
