@@ -74,12 +74,12 @@ static uint64_t case_ul_6(void);
 
 typedef double(*cases_d_fn)(void);
 static cases_d_fn cases_d[6] = {
-    case_d_1, case_d_2, case_d_3, case_d_4, case_d_5, case_d_6
+	case_d_1, case_d_2, case_d_3, case_d_4, case_d_5, case_d_6
 };
 
 typedef uint64_t(*cases_ul_fn)(void);
 static cases_ul_fn cases_ul[6] = {
-    case_ul_1, case_ul_2, case_ul_3, case_ul_4, case_ul_5, case_ul_6
+	case_ul_1, case_ul_2, case_ul_3, case_ul_4, case_ul_5, case_ul_6
 };
 
 static uint32_t case_i = 0;
@@ -87,176 +87,193 @@ double (*WELLRNG44497a_d)(void);
 uint64_t (*WELLRNG44497a_ul)(void);
 
 void InitWELLRNG44497a(uint32_t *init){
-    int j;
-    state_i=0;
-    case_i=0;
-    WELLRNG44497a_d = case_d_1;
-    WELLRNG44497a_ul = case_ul_1;
-    for(j=0;j<R;j++)
-        STATE[j]=init[j];
-    for(j=0;j<R;j++)
-      WELLRNG44497a_ul(); // scrambles a bit
+	int j;
+	state_i=0;
+	case_i=0;
+	WELLRNG44497a_d = case_d_1;
+	WELLRNG44497a_ul = case_ul_1;
+	for(j=0;j<R;j++)
+		STATE[j]=init[j];
+	for(j=0;j<R;j++)
+	  WELLRNG44497a_ul(); // scrambles a bit
 }
 
-void GetSeedWELLRNG44497a(uint32_t *seed){
-    int j;
-    seed[R] = case_i;
-    for(j=0;j<R;j++)
-        seed[j]=STATE[j];
+void GetSeedWELLRNG44497a(uint32_t *seed)
+{
+	int j;
+	seed[R] = case_i;
+	for(j=0;j<R;j++)
+		seed[j]=STATE[j];
 }
 
-void SetSeedWELLRNG44497a(uint32_t *seed){
-    int j;
-    case_i = seed[R];
-    case_i %= 6;
-    WELLRNG44497a_d = cases_d[case_i];
-    WELLRNG44497a_ul = cases_ul[case_i];
-    for(j=0;j<R;j++)
-        STATE[j]=seed[j];
+void SetSeedWELLRNG44497a(uint32_t *seed)
+{
+	int j;
+	case_i = seed[R];
+	case_i %= 6;
+	WELLRNG44497a_d = cases_d[case_i];
+	WELLRNG44497a_ul = cases_ul[case_i];
+	for(j=0;j<R;j++)
+		STATE[j]=seed[j];
 }
 
 void case_1(void){
-    // state_i == 0
-    z0 = (Vrm1Under & MASKL) | (Vrm2Under & MASKU);
-    z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
-    z2 = MAT0NEG(-10,VM2) ^ MAT3NEG(-26,VM3);
-    newV1  = z1 ^ z2;
-    newV0Under = MAT1(z0) ^ MAT0POS(20,z1) ^  MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
-    state_i = R-1;
-    case_i=2;
-    WELLRNG44497a_d = case_d_3;
-    WELLRNG44497a_ul = case_ul_3;
+	// state_i == 0
+	z0 = (Vrm1Under & MASKL) | (Vrm2Under & MASKU);
+	z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
+	z2 = MAT0NEG(-10,VM2) ^ MAT3NEG(-26,VM3);
+	newV1  = z1 ^ z2;
+	newV0Under = MAT1(z0) ^ MAT0POS(20,z1) ^  MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
+	state_i = R-1;
+	case_i=2;
+	WELLRNG44497a_d = case_d_3;
+	WELLRNG44497a_ul = case_ul_3;
 }
 
 double case_d_1(void){
-    case_1();
-    return ((double) STATE[state_i] * FACT);
+	case_1();
+	return ((double) STATE[state_i] * FACT);
 }
 
-uint64_t case_ul_1(void){
-    case_1();
-    return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
+uint64_t case_ul_1(void)
+{
+	case_1();
+	return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
 }
 
-void case_2(void){
-    // state_i == 1
-    z0 = (Vrm1 & MASKL) | (Vrm2Under & MASKU);
-    z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
-    z2 = MAT0NEG(-10,VM2) ^ MAT3NEG(-26,VM3);
-    newV1 = z1 ^ z2;
-    newV0 =  MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
-    state_i=0;
-    case_i=0;
-    WELLRNG44497a_d = case_d_1;
-    WELLRNG44497a_ul = case_ul_1;
+void case_2(void)
+{
+	// state_i == 1
+	z0 = (Vrm1 & MASKL) | (Vrm2Under & MASKU);
+	z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
+	z2 = MAT0NEG(-10,VM2) ^ MAT3NEG(-26,VM3);
+	newV1 = z1 ^ z2;
+	newV0 =  MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
+	state_i=0;
+	case_i=0;
+	WELLRNG44497a_d = case_d_1;
+	WELLRNG44497a_ul = case_ul_1;
 }
 
-double case_d_2(void){
-    case_2();
-    return ((double) STATE[state_i] * FACT);
+double case_d_2(void)
+{
+	case_2();
+	return ((double) STATE[state_i] * FACT);
 }
 
-uint64_t case_ul_2(void){
-    case_2();
-    return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
+uint64_t case_ul_2(void)
+{
+	case_2();
+	return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
 }
 
-void case_3(void){
-    // state_i+M1 >= R
-    z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
-    z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1Over);
-    z2 = MAT0NEG(-10,VM2Over) ^ MAT3NEG(-26,VM3Over);
-    newV1 = z1 ^ z2;
-    newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
-    state_i--;
-    if(state_i+M1<R) {
-        case_i=3;
-        WELLRNG44497a_d = case_d_4;
-        WELLRNG44497a_ul = case_ul_4;
-    }
+void case_3(void)
+{
+	// state_i+M1 >= R
+	z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
+	z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1Over);
+	z2 = MAT0NEG(-10,VM2Over) ^ MAT3NEG(-26,VM3Over);
+	newV1 = z1 ^ z2;
+	newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
+	state_i--;
+	if(state_i+M1<R) {
+		case_i=3;
+		WELLRNG44497a_d = case_d_4;
+		WELLRNG44497a_ul = case_ul_4;
+	}
 }
 
-double case_d_3(void){
-    case_3();
-    return ((double) STATE[state_i] * FACT);
+double case_d_3(void)
+{
+	case_3();
+	return ((double) STATE[state_i] * FACT);
 }
 
 uint64_t case_ul_3(void){
-    case_3();
-    return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
+	case_3();
+	return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
 }
 
-void case_4(void){
-    // state_i+M3 >= R
-    z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
-    z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
-    z2 = MAT0NEG(-10,VM2Over) ^ MAT3NEG(-26,VM3Over);
-    newV1 = z1 ^ z2;
-    newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
-    state_i--;
-    if (state_i+M3 < R) {
-        case_i=4;
-        WELLRNG44497a_d = case_d_5;
-        WELLRNG44497a_ul = case_ul_5;
-    }
+void case_4(void)
+{
+	// state_i+M3 >= R
+	z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
+	z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
+	z2 = MAT0NEG(-10,VM2Over) ^ MAT3NEG(-26,VM3Over);
+	newV1 = z1 ^ z2;
+	newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
+	state_i--;
+	if (state_i+M3 < R) {
+		case_i=4;
+		WELLRNG44497a_d = case_d_5;
+		WELLRNG44497a_ul = case_ul_5;
+	}
 }
 
-double case_d_4(void){
-    case_4();
-    return ((double) STATE[state_i] * FACT);
+double case_d_4(void)
+{
+	case_4();
+	return ((double) STATE[state_i] * FACT);
 }
 
-uint64_t case_ul_4(void){
-    case_4();
-    return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
+uint64_t case_ul_4(void)
+{
+	case_4();
+	return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
 }
 
-void case_5(void){
-    //state_i+M2 >= R
-    z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
-    z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
-    z2 = MAT0NEG(-10,VM2Over) ^ MAT3NEG(-26,VM3);
-    newV1 = z1 ^ z2;
-    newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
-    state_i--;
-    if(state_i+M2 < R) {
-        case_i=5;
-        WELLRNG44497a_d = case_d_6;
-        WELLRNG44497a_ul = case_ul_6;
-    }
+void case_5(void)
+{
+	//state_i+M2 >= R
+	z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
+	z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
+	z2 = MAT0NEG(-10,VM2Over) ^ MAT3NEG(-26,VM3);
+	newV1 = z1 ^ z2;
+	newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
+	state_i--;
+	if(state_i+M2 < R) {
+		case_i=5;
+		WELLRNG44497a_d = case_d_6;
+		WELLRNG44497a_ul = case_ul_6;
+	}
 }
 
-double case_d_5(void){
-    case_5();
-    return ((double) STATE[state_i] * FACT);
+double case_d_5(void)
+{
+	case_5();
+	return ((double) STATE[state_i] * FACT);
 }
 
-uint64_t case_ul_5(void){
-    case_5();
-    return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
+uint64_t case_ul_5(void)
+{
+	case_5();
+	return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
 }
 
-void case_6(void){
-    // 2 <= state_i <= R-M2-1
-    z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
-    z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
-    z2 = MAT0NEG(-10,VM2) ^ MAT3NEG(-26,VM3);
-    newV1 = z1 ^ z2;
-    newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
-    state_i--;
-    if(state_i == 1) {
-        case_i=1;
-        WELLRNG44497a_d = case_d_2;
-        WELLRNG44497a_ul = case_ul_2;
-    }
+void case_6(void)
+{
+	// 2 <= state_i <= R-M2-1
+	z0 = (Vrm1 & MASKL) | (Vrm2 & MASKU);
+	z1 = MAT0NEG(-24,V0) ^ MAT0POS(30,VM1);
+	z2 = MAT0NEG(-10,VM2) ^ MAT3NEG(-26,VM3);
+	newV1 = z1 ^ z2;
+	newV0 = MAT1(z0) ^ MAT0POS(20,z1) ^ MAT5(9,0xb729fcecU,0xfbffffffU,0x00020000U,z2) ^ MAT1(newV1);
+	state_i--;
+	if(state_i == 1) {
+		case_i=1;
+		WELLRNG44497a_d = case_d_2;
+		WELLRNG44497a_ul = case_ul_2;
+	}
 }
 
-double case_d_6(void){
-    case_6();
-    return ((double) STATE[state_i] * FACT);
+double case_d_6(void)
+{
+	case_6();
+	return ((double) STATE[state_i] * FACT);
 }
 
-uint64_t case_ul_6(void){
-    case_6();
-    return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
+uint64_t case_ul_6(void)
+{
+	case_6();
+	return (uint64_t)STATE[state_i]|(((uint64_t)(STATE[(state_i+1)%R]))<<32);
 }

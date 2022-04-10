@@ -1,5 +1,6 @@
 SRCS := \
 	src/cyper.c \
+	src/WELL512a.c \
 	src/WELL44497a.c \
 	src/WELL44497b.c \
 	src/uECC.c \

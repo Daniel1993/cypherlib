@@ -3,11 +3,12 @@
 
 #include <stdint.h>
 
-#define CYP_RND_NB_FNS 2
+#define CYP_RND_NB_FNS 3
 enum CYP_RND_FN
 {
-    CYP_RND_WELL44497A = 0,
-    CYP_RND_WELL44497B = 1
+    CYP_RND_WELL512A = 0,
+    CYP_RND_WELL44497A = 1,
+    CYP_RND_WELL44497B = 2
 };
 extern const char *CYP_RND_FN_NAMES[CYP_RND_NB_FNS]; // use this array to retrive the CYP_RND_FN string
 
@@ -95,6 +96,7 @@ int cyp_prv_sign(cyp_prv_key_s, void *data_in, void *signature_out, uint64_t siz
 
 // sets to use a specific algorithm
 int cyp_rnd_bind(enum CYP_RND_FN);
+int cyp_rnd_bind_WELL512a();
 int cyp_rnd_bind_WELL44497a();
 int cyp_rnd_bind_WELL44497b();
 

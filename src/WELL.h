@@ -8,6 +8,12 @@
 
 #include <stdint.h>
 
+void InitWELLRNG512a(unsigned int *init);
+void GetSeedWELLRNG512a(unsigned int *seed);
+void SetSeedWELLRNG512a(unsigned int *seed);
+extern double WELLRNG512a_d(void);
+extern uint64_t WELLRNG512a_ul(void);
+
 void InitWELLRNG44497a(unsigned int *init);
 void GetSeedWELLRNG44497a(unsigned int *seed);
 void SetSeedWELLRNG44497a(unsigned int *seed);

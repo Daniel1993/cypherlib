@@ -12,14 +12,15 @@
 
 const char *CYP_RND_FN_NAMES[CYP_RND_NB_FNS] =
 {
+    "CYP_RND_WELL512A",
     "CYP_RND_WELL44497A",
     "CYP_RND_WELL44497B"
 };
 
 const char *CYP_HASH_FN_NAMES[CYP_HASH_NB_FNS] =
 {
-    "CYP_RND_WELL44497A",
-    "CYP_RND_WELL44497B"
+    "CYP_HASH_SHA3_256",
+    "CYP_HASH_SHA3_512"
 };
 
 const char *CYP_SIM_FN_NAMES[CYP_SIM_NB_FNS] =
@@ -38,6 +39,7 @@ const char *CYP_PAIR_FN_NAMES[CYP_PAIR_NB_FNS] =
 };
 
 static const uint32_t SIZE_OF_WELL44497 = 1391;
+static const uint32_t SIZE_OF_WELL512 = 16;
 static const uint32_t SIZE_OF_SHA3_256 = 8;
 static const uint32_t SIZE_OF_SHA3_512 = 16;
 
@@ -133,7 +135,7 @@ static thread_local int (*i_cyp_prv_sign)(cyp_prv_key_s, void *data_in, void *si
 
 int cyp_init()
 {
-    cyp_rnd_bind_WELL44497a();
+    cyp_rnd_bind_WELL512a();
     cyp_hash_bind_SHA3_512();
     cyp_sim_bind_AES256_CBC();
     cyp_pair_bind_ECC_secp256k1();
@@ -346,6 +348,9 @@ int cyp_rnd_bind(enum CYP_RND_FN fn)
     const int ret_err = -1;
     switch (fn)
     {
+    case CYP_RND_WELL512A:
+        cyp_rnd_bind_WELL512a();
+        return ret_no_err;
     case CYP_RND_WELL44497A:
         cyp_rnd_bind_WELL44497a();
         return ret_no_err;
@@ -358,6 +363,55 @@ int cyp_rnd_bind(enum CYP_RND_FN fn)
 }
 
 // --- random generator
+// --- WELL512a
+static enum CYP_RND_FN WELL512a_get_alg()
+{
+    return CYP_RND_WELL512A;
+}
+
+static int WELL512a_get_seed_size()
+{
+    return SIZE_OF_WELL512*sizeof(uint32_t) + sizeof(uint32_t);
+}
+
+static int WELL512a_set_seed(void *seed)
+{
+    SetSeedWELLRNG512a((uint32_t*)seed);
+    return 0;
+}
+
+static int WELL512a_get_seed(void *seed)
+{
+    GetSeedWELLRNG512a((uint32_t*)seed);
+    return 0;
+}
+
+static uint64_t WELL512a_gen_ul()
+{
+    return WELLRNG512a_ul();
+}
+
+static double WELL512a_gen_d()
+{
+    return WELLRNG512a_d();
+}
+
+int cyp_rnd_bind_WELL512a()
+{   
+    uint32_t seed[SIZE_OF_WELL512+1]; // TODO: init with noise
+    seed[SIZE_OF_WELL512] = 0;
+    for (int i = 0; i < SIZE_OF_WELL512; ++i)
+        seed[i] = i;
+    InitWELLRNG512a(seed);
+
+    i_cyp_rnd_get_alg = WELL512a_get_alg;
+    i_cyp_rnd_get_seed_size = WELL512a_get_seed_size;
+    i_cyp_rnd_set_seed = WELL512a_set_seed;
+    i_cyp_rnd_get_seed = WELL512a_get_seed;
+    i_cyp_rnd_gen_ul = WELL512a_gen_ul;
+    i_cyp_rnd_gen_d = WELL512a_gen_d;
+    return 0;
+}
 // --- WELL44497a
 static enum CYP_RND_FN WELL44497a_get_alg()
 {
